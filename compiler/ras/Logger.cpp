@@ -70,6 +70,8 @@ template OMR::NullLogger *OMR::NullLogger::create(TR::RawAllocator t);
  * AssertingLogger
  * -----------------------------------------------------------------------------
  */
+//preet
+int32_t OMR::AssertingLogger::preetPrintf(const char *file, const char *format, ...) { return 0; }
 
 int32_t OMR::AssertingLogger::printf(const char *format, ...)
 {
@@ -208,7 +210,20 @@ int32_t OMR::CStdIOStreamLogger::close()
 
     return result;
 }
+int32_t OMR::CStdIOStreamLogger::preetPrintf(const char *file, const char *format, ...) {
+    // print prefix
+    int32_t len = this->printf("[PREET] ");
 
+    // handle variadic args
+    va_list args;
+    va_start(args, format);
+
+    len += ::vfprintf(getStream(), format, args);
+
+    va_end(args);
+
+    return len;
+}
 OMR::CStdIOStreamLogger *OMR::CStdIOStreamLogger::_stderr = NULL;
 OMR::CStdIOStreamLogger *OMR::CStdIOStreamLogger::_stdout = NULL;
 
@@ -259,6 +274,21 @@ template OMR::CStdIOStreamLogger *OMR::CStdIOStreamLogger::create(PERSISTENT_NEW
  * TRIOStreamLogger
  * -----------------------------------------------------------------------------
  */
+//preet
+int32_t OMR::TRIOStreamLogger::preetPrintf(const char *file, const char *format, ...) {
+    // print prefix
+    int32_t len = this->printf("[PREET] [%s]",file);
+
+    // handle variadic args
+    va_list args;
+    va_start(args, format);
+
+    len += TR::IO::vfprintf(getStream(), format, args);
+
+    va_end(args);
+
+    return len;
+}
 OMR::TRIOStreamLogger::TRIOStreamLogger(TR::FILE *stream, bool requiresStreamClose)
     : _stream(stream)
     , _requiresStreamClose(requiresStreamClose)
@@ -433,6 +463,8 @@ template OMR::CircularLogger *OMR::CircularLogger::create(PERSISTENT_NEW_DECLARE
  * MemoryBufferLogger
  * -----------------------------------------------------------------------------
  */
+//preet
+int32_t OMR::MemoryBufferLogger::preetPrintf(const char *file, const char *format, ...) { return 0; }
 
 OMR::MemoryBufferLogger::MemoryBufferLogger(char *buf, size_t maxBufLen)
     : _buf(buf)

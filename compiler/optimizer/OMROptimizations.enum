@@ -120,3 +120,5 @@
    OPTIMIZATION(methodHandleTransformer)
    OPTIMIZATION(catchBlockProfiler)
    OPTIMIZATION(constRefPrivatization)
+// preet
+   OPTIMIZATION(preetOptimization)

@@ -155,6 +155,9 @@ public:
      */
     virtual int32_t println() = 0;
 
+        //preet
+        virtual int32_t preetPrintf(const char* file, const char *format, ...)=0;
+
     /**
      * @brief
      *     Read at most \c bufSizeInBytes from the current Logger position into \c buf
@@ -295,6 +298,8 @@ public:
      * @return A \c NullLogger object if successful; NULL on any error
      */
     template<typename AllocatorType> static NullLogger *create(AllocatorType t);
+//preet
+    virtual int32_t preetPrintf(const char* file, const char *format, ...){return 0;}
 
     virtual int32_t printf(const char *format, ...) { return 0; }
 
@@ -342,7 +347,9 @@ public:
      * @return An \c AssertingLogger object if successful; NULL on any error
      */
     template<typename AllocatorType> static AssertingLogger *create(AllocatorType t);
-
+        //preet
+    virtual int32_t preetPrintf(const char* file, const char *format, ...);
+  
     virtual int32_t printf(const char *format, ...);
 
     virtual int32_t prints(const char *string);
@@ -407,6 +414,9 @@ public:
     static CStdIOStreamLogger *create(AllocatorType t, const char *filename, const char *fileMode = "wb+");
 
     ~CStdIOStreamLogger();
+    //preet
+    virtual int32_t preetPrintf(const char* file, const char *format, ...);
+
 
     virtual int32_t printf(const char *format, ...);
 
@@ -516,7 +526,9 @@ public:
      */
     template<typename AllocatorType>
     static TRIOStreamLogger *create(AllocatorType t, const char *filename, const char *fileMode = "wb+");
-
+        //preet
+    virtual int32_t preetPrintf(const char* file, const char *format, ...);
+ 
     virtual int32_t printf(const char *format, ...);
 
     virtual int32_t prints(const char *string);
@@ -602,7 +614,9 @@ public:
      */
     template<typename AllocatorType>
     static CircularLogger *create(AllocatorType t, OMR::Logger *innerLogger, int64_t rewindThresholdInChars);
-
+       //preet
+    virtual int32_t preetPrintf(const char* file, const char *format, ...){return 0;}
+  
     virtual int32_t printf(const char *format, ...);
 
     virtual int32_t prints(const char *string);
@@ -744,7 +758,9 @@ public:
     virtual int32_t close();
 
     virtual bool supportsRewinding() { return true; }
-
+        //preet
+    virtual int32_t preetPrintf(const char* file, const char *format, ...);
+ 
 private:
     MemoryBufferLogger(char *buf, size_t maxBufLen);
 

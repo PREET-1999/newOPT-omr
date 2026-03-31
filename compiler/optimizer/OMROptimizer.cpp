@@ -160,6 +160,9 @@ const OptimizationStrategy cheapObjectAllocationOpts[] = {
 };
 
 const OptimizationStrategy expensiveObjectAllocationOpts[] = {
+        //preet commented below to test always doing EA for value number info debugging
+    { eachEscapeAnalysisPassGroup, Always },
+
     { eachEscapeAnalysisPassGroup, IfEAOpportunities },
     { explicitNewInitialization, IfNews }, // do before local dead store
     { endGroup }

@@ -47,6 +47,9 @@ class SymbolReference;
 class TreeTop;
 } // namespace TR
 
+//preet
+class PTG;
+
 namespace OMR {
 
 class OMR_EXTENSIBLE TreeTop {
@@ -110,6 +113,11 @@ public:
 
     void setLastInstruction(TR::Instruction *i) { *(TR::Instruction **)((char *)self() - sizeof(void *)) = i; }
 
+    // preet
+    PTG *_in;
+    PTG *_out;
+    void initializeInAndOutSets();
+    void printDataFlow();
 protected:
     /// Downcast to concrete type
     TR::TreeTop *self();

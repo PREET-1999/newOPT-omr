@@ -39,7 +39,11 @@
 #include "il/TreeTop.hpp"
 #include "il/TreeTop_inlines.hpp"
 #include "infra/Assert.hpp"
+//preet
+#include "il/PTG.hpp"
 
+//preet
+#include<iostream>
 TR::TreeTop *OMR::TreeTop::create(TR::Compilation *comp)
 {
     bool trace = comp->getOption(TR_TraceCG) || debug("traceGRA");
@@ -276,4 +280,31 @@ bool OMR::TreeTop::isPossibleDef()
     } else {
         return false;
     }
+}
+//preet
+void OMR::TreeTop::initializeInAndOutSets()
+{
+     _in = new PTG();
+    _out = new PTG();
+}
+
+
+void OMR::TreeTop::printDataFlow()
+{
+    std::cout << "=================================\n";
+    std::cout << "TreeTop: " << this <<" (node)" <<this->getNode() << "\n\n";
+
+    if (_in) {
+        std::cout << "IN:\n";
+        _in->printStack();
+        _in->printHeap();
+    }
+
+    if (_out) {
+        std::cout << "\nOUT:\n";
+        _out->printStack();
+        _out->printHeap();
+    }
+
+    std::cout << "=================================\n\n";
 }
