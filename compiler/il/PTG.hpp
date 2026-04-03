@@ -48,6 +48,7 @@ public:
     bool isKeyPresentInHeap(std::pair<TR::Node*,TR::SymbolReference*> objField);
     bool isPointsToOfKeyInHeapBottom(std::pair<TR::Node*,TR::SymbolReference*> key);
     void setPointsToOfKeyInHeapToBottom(std::pair<TR::Node*,TR::SymbolReference*> key); //the "caller already should have done the check" of correct element insertion
+  bool doesStarFieldFromNodeExists(TR::Node* node);
 
   std::set<TR::Node *> getNodeSetForKeyInHeap(std::pair<TR::Node*,TR::SymbolReference*> key);
 

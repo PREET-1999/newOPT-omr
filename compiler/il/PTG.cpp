@@ -114,7 +114,12 @@ void PTG::printHeap()
     std::pair<TR::Node *, TR::SymbolReference *> objectFieldPair;
     for (it = _heap.begin(); it != _heap.end(); ++it) {
         objectFieldPair = it->first;
-        std::cout << "[" << objectFieldPair.first << "." << (objectFieldPair.second)->getCPIndex() << "]-> { ";
+
+
+        if(objectFieldPair.second)
+            std::cout << "[" << objectFieldPair.first << "." << (objectFieldPair.second)->getCPIndex() << "]-> { ";
+        else //its *
+            std::cout << "[" << objectFieldPair.first << "." <<"*" << "]-> { ";
 
         if (isPointsToOfKeyInHeapBottom(objectFieldPair)) {
             std::cout << "_|_";
@@ -204,6 +209,15 @@ void PTG::setPointsToOfKeyInHeapToBottom(std::pair<TR::Node *, TR::SymbolReferen
     // //     nodes.insert(bottom);
     // //     _heap.insert(pair<pair<Node *, SymbolReference *>, set<Node *>>(objField, nodes));
     // // }
+}
+
+bool PTG::doesStarFieldFromNodeExists(TR::Node *node) { 
+    TR::SymbolReference* starField = nullptr;
+    std::pair<TR::Node *, TR::SymbolReference *> objFieldPair = {node,starField};
+    if(_heap.find(objFieldPair)!=_heap.end()){
+        return true;
+    }
+    return false; 
 }
 
 void PTG::setPointsToOfKeyInStackToBottom(int autoSlot)

@@ -799,9 +799,6 @@ TR::OptionTable OMR::Options::_jitOptions[] = {
     { "disablePRBE", "O\tdisable partial redundancy branch elimination", SET_OPTION_BIT(TR_DisablePRBE), "F" },
     { "disablePRE", "O\tdisable partial redundancy elimination", TR::Options::disableOptimization,
      partialRedundancyElimination, 0, "P" },
-     //preet
-     { "tracePreetOptPass", "L\ttrace preets optimization", TR::Options::traceOptimization,
-     preetOptimization, 0, "P" },
     { "disablePreexistenceDuringGracePeriod", "O\tdisable preexistence during CLP grace period",
      SET_OPTION_BIT(TR_DisablePrexistenceDuringGracePeriod), "F" },
     { "disableProfiledInlining", "O\tdisable inlining based on profiled this values",
@@ -2034,6 +2031,9 @@ TR::OptionTable OMR::Options::_jitOptions[] = {
      osrLiveRangeAnalysis, 0, "P" },
     { "tracePRE", "L\ttrace partial redundancy elimination", TR::Options::traceOptimization,
      partialRedundancyElimination, 0, "P" },
+     //preet
+     { "tracePreetOptPass", "L\ttrace preets optimization", TR::Options::traceOptimization,
+     preetOptimization, 0, "P" },
     { "tracePREForSubNodeReplacement",
      "L\ttrace partial redundancy elimination focussed on optimal subnode replacement", SET_OPTION_BIT(TR_TracePREForOptimalSubNodeReplacement), "P" },
     { "traceProfiledNodeVersioning", "L\ttrace profiled node versioning", TR::Options::traceOptimization,
