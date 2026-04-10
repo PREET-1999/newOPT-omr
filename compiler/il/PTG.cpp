@@ -3,7 +3,6 @@
 #include "il/PTG.hpp"
 #include "il/SymbolReference.hpp"
 #include "PTG.hpp"
-
 // using namespace std;
 
 PTG::PTG()
@@ -336,4 +335,35 @@ std::vector<std::pair<TR::Node *, TR::SymbolReference *> > PTG::getHeapKeysWithN
     }
 
     return heapKeys;
+}
+
+void PTG::findNodes(TR::Node *node, std::vector<TR::SymbolReference*> fieldStack,int currLevel, int noOfFieldsAccessNeeded, std::vector<TR::Node *> &res)
+{       
+        std::cout<<"findNodes called with "<<node <<" " <<"currLevel " <<currLevel <<" noOfFieldsAccessNeeded " <<noOfFieldsAccessNeeded <<"\n"; 
+        TR::SymbolReference* symRef;
+        //based on currLevel, get the field from fieldStack
+        symRef = fieldStack[currLevel];
+
+        int32_t index = symRef->getCPIndex();
+        std::cout<<"fetched field" <<index <<" from fieldStack\n";
+        //first check if {node,*} is in heap
+        if(doesStarFieldFromNodeExists(node))
+        {   TR::Node* bottom = nullptr;
+            res.push_back(bottom);
+            return;
+        }
+
+        std::set<TR::Node*> nodes = getNodeSetForKeyInHeap(std::pair<TR::Node*, TR::SymbolReference*>{node, symRef});
+        if(currLevel == noOfFieldsAccessNeeded){
+            for(auto finalNode : nodes){
+                res.push_back(finalNode);
+            }
+        }
+        else{
+            for(auto nextNode : nodes){
+                findNodes(nextNode,fieldStack,currLevel+1,noOfFieldsAccessNeeded,res);
+            }
+        }
+
+    
 }

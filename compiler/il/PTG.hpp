@@ -8,7 +8,6 @@
 
 // #include "il/SymbolReference.hpp"
 // #include "il/Node.hpp"
-
 namespace TR {
     class Node;
     class SymbolReference;
@@ -56,6 +55,9 @@ public:
   bool isEmpty();
 
    std::vector<std::pair<TR::Node*, TR::SymbolReference*>> getHeapKeysWithNode(TR::Node* node);
+    
+   
+   void findNodes(TR::Node* node, std::vector<TR::SymbolReference*>fieldStack ,int currLevel, int finalLevel, std::vector<TR::Node*>&res);
 
 };
 
