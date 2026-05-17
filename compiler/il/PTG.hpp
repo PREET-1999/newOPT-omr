@@ -5,7 +5,7 @@
 #include <map>
 #include <utility>
 #include <vector>
-
+#include <unordered_set>
 // #include "il/SymbolReference.hpp"
 // #include "il/Node.hpp"
 namespace TR {
@@ -58,7 +58,8 @@ public:
     
    
    void findNodes(TR::Node* node, std::vector<TR::SymbolReference*>fieldStack ,int currLevel, int finalLevel, std::vector<TR::Node*>&res);
-
+ bool pathExistBetween(TR::Node * src, TR::Node* dest,std::unordered_set<TR::Node*>& visited);
+ std::set<TR::Node*> getReachableNeighbours(TR::Node* nodeObj);
 };
 
 #endif

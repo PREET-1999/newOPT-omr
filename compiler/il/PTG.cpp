@@ -3,6 +3,7 @@
 #include "il/PTG.hpp"
 #include "il/SymbolReference.hpp"
 #include "PTG.hpp"
+#include <unordered_set>
 // using namespace std;
 
 PTG::PTG()
@@ -366,4 +367,46 @@ void PTG::findNodes(TR::Node *node, std::vector<TR::SymbolReference*> fieldStack
         }
 
     
+}
+
+bool PTG::pathExistBetween(TR::Node *src, TR::Node *dest, std::unordered_set<TR::Node *> &visited)
+{
+    // cout << "at TR::Node " << src->_id << "\n";
+    visited.insert(src);
+    if(src == dest)
+    return true;
+
+    std::set<TR::Node *> neighbours = getReachableNeighbours(src);
+    // cout << " with neighbours being [";
+    // for (TR::Node *neighbor : neighbours)
+    // {
+    //     cout << "n" << neighbor->_id << " ";
+    // }
+    // cout << "]\n";
+    for (TR::Node *neighbor : neighbours)
+    {
+        if (!visited.count(neighbor))
+        {
+            if (pathExistBetween(neighbor, dest, visited))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+std::set<TR::Node *> PTG::getReachableNeighbours(TR::Node *nodeObj)
+{
+    std::set<TR::Node *> neighbours;
+    std::vector<std::pair<TR::Node *, TR::SymbolReference *>> heapKeys = getHeapKeysWithNode(nodeObj);
+    for (auto key : heapKeys)
+    {
+        std::set<TR::Node *> nodeSet = getNodeSetForKeyInHeap(key);
+        for (auto node : nodeSet)
+        {
+            neighbours.insert(node);
+        }
+    }
+    return neighbours;
 }

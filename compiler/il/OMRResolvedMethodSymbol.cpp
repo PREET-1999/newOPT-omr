@@ -2094,6 +2094,11 @@ bool OMR::ResolvedMethodSymbol::hasEscapeAnalysisOpportunities()
 {
     return self()->hasNews() || self()->hasDememoizationOpportunities();
 }
+// //preet commented below, as before checking to just test if EA triggers if No new allocations
+// bool OMR::ResolvedMethodSymbol::hasEscapeAnalysisOpportunities()
+// {
+//     return self()->hasNews();
+// }
 
 bool OMR::ResolvedMethodSymbol::doJSR292PerfTweaks() { return false; }
 
