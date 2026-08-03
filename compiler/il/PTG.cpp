@@ -178,6 +178,15 @@ bool PTG::isKeyPresentInHeap(std::pair<TR::Node *, TR::SymbolReference *> objFie
     return false;
 }
 
+bool PTG::deleteKeyFromHeap(std::pair<TR::Node *, TR::SymbolReference *> objField)
+{
+    if (PTG::isKeyPresentInHeap(objField)) {
+        _heap.erase(objField);
+        return true;
+    }
+    return false;
+}
+
 bool PTG::isPointsToOfKeyInHeapBottom(std::pair<TR::Node *, TR::SymbolReference *> key)
 {
     std::set<TR::Node *> nodeSet = getNodeSetForKeyInHeap(key);

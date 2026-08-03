@@ -1,4 +1,4 @@
-//preet
+// preet
 #ifndef PTG_H
 #define PTG_H
 #include <set>
@@ -6,60 +6,64 @@
 #include <utility>
 #include <vector>
 #include <unordered_set>
+
 // #include "il/SymbolReference.hpp"
 // #include "il/Node.hpp"
 namespace TR {
-    class Node;
-    class SymbolReference;
-}
-class PTG
-{ // MayPointsTo To Start with
+class Node;
+class SymbolReference;
+} // namespace TR
+
+class PTG { // MayPointsTo To Start with
 public:
-  // stack a->{0xaabcde, 0xabcde}
-  std::map<int,        /* auto slots */
-      std::set<TR::Node *> /* set of Nodes */
-      >
-      _stack;
 
-  std::map<std::pair<TR::Node *, TR::SymbolReference *>, /*{01,f} */
-      std::set<TR::Node *>                     /* set of Nodes */
-      >
-      _heap;
+    std::map<int, /* auto slots */
+        std::set<TR::Node *> /* set of Nodes */
+        >
+        _stack;
 
-  PTG();
+    std::map<std::pair<TR::Node *, TR::SymbolReference *>, /*{01,f} */
+        std::set<TR::Node *> /* set of Nodes */
+        >
+        _heap;
 
-  /*
-  STACK
-  */
-  void printStack();
-  int insertIntoStack(int a, TR::Node *obj);
-  bool isKeyPresentInStack(int a);
-  std::set<TR::Node *> getNodeSetForKeyInStack(int key);
-  bool deletekeyFromFromStack(int a);
-    void setPointsToOfKeyInStackToBottom(int key); //the "caller already should have done the check" of correct element insertion
+    PTG();
+
+    /*
+    STACK
+    */
+    void printStack();
+    int insertIntoStack(int a, TR::Node *obj);
+    bool isKeyPresentInStack(int a);
+    std::set<TR::Node *> getNodeSetForKeyInStack(int key);
+    bool deletekeyFromFromStack(int a);
+    void setPointsToOfKeyInStackToBottom(
+        int key); // the "caller already should have done the check" of correct element insertion
     bool isPointsToOfKeyInStackBottom(int key);
 
-  /*
-  HEAP
-  */
-  void printHeap();
-  int insertIntoHeap(std::pair<TR::Node*,TR::SymbolReference*> objField ,TR::Node *obj);
-    bool isKeyPresentInHeap(std::pair<TR::Node*,TR::SymbolReference*> objField);
-    bool isPointsToOfKeyInHeapBottom(std::pair<TR::Node*,TR::SymbolReference*> key);
-    void setPointsToOfKeyInHeapToBottom(std::pair<TR::Node*,TR::SymbolReference*> key); //the "caller already should have done the check" of correct element insertion
-  bool doesStarFieldFromNodeExists(TR::Node* node);
+    /*
+    HEAP
+    */
+    void printHeap();
+    int insertIntoHeap(std::pair<TR::Node *, TR::SymbolReference *> objField, TR::Node *obj);
+    bool isKeyPresentInHeap(std::pair<TR::Node *, TR::SymbolReference *> objField);
+    bool deleteKeyFromHeap(std::pair<TR::Node *, TR::SymbolReference *> objField);
+    bool isPointsToOfKeyInHeapBottom(std::pair<TR::Node *, TR::SymbolReference *> key);
+    void setPointsToOfKeyInHeapToBottom(std::pair<TR::Node *, TR::SymbolReference *>
+            key); // the "caller already should have done the check" of correct element insertion
+    bool doesStarFieldFromNodeExists(TR::Node *node);
 
-  std::set<TR::Node *> getNodeSetForKeyInHeap(std::pair<TR::Node*,TR::SymbolReference*> key);
+    std::set<TR::Node *> getNodeSetForKeyInHeap(std::pair<TR::Node *, TR::SymbolReference *> key);
 
-  bool equals(PTG* other);
-  bool isEmpty();
+    bool equals(PTG *other);
+    bool isEmpty();
 
-   std::vector<std::pair<TR::Node*, TR::SymbolReference*>> getHeapKeysWithNode(TR::Node* node);
-    
-   
-   void findNodes(TR::Node* node, std::vector<TR::SymbolReference*>fieldStack ,int currLevel, int finalLevel, std::vector<TR::Node*>&res);
- bool pathExistBetween(TR::Node * src, TR::Node* dest,std::unordered_set<TR::Node*>& visited);
- std::set<TR::Node*> getReachableNeighbours(TR::Node* nodeObj);
+    std::vector<std::pair<TR::Node *, TR::SymbolReference *> > getHeapKeysWithNode(TR::Node *node);
+
+    void findNodes(TR::Node *node, std::vector<TR::SymbolReference *> fieldStack, int currLevel, int finalLevel,
+        std::vector<TR::Node *> &res);
+    bool pathExistBetween(TR::Node *src, TR::Node *dest, std::unordered_set<TR::Node *> &visited);
+    std::set<TR::Node *> getReachableNeighbours(TR::Node *nodeObj);
 };
 
 #endif
