@@ -31,11 +31,13 @@ void PTG::printStack()
 
     for (it = _stack.begin(); it != _stack.end(); ++it) {
         std::cout << " " << it->first << "-> { ";
-
         if (isPointsToOfKeyInStackBottom(it->first)) {
             std::cout << "_|_";
         } else {
             for (nodeIt = it->second.begin(); nodeIt != it->second.end(); nodeIt++) {
+                if(*nodeIt == PTG::unknownNode())
+                std::cout<<"? ";
+                else
                 std::cout << *nodeIt << " ";
             }
         }
@@ -127,6 +129,9 @@ void PTG::printHeap()
 
         else {
             for (nodeIt = it->second.begin(); nodeIt != it->second.end(); nodeIt++) {
+                if(*nodeIt == PTG::nullConstNode())
+                    std::cout<<" NULL ";
+                else
                 std::cout << (*nodeIt) << " ";
             }
         }
@@ -261,6 +266,18 @@ bool PTG::isPointsToOfKeyInStackBottom(int key)
     }
     return false;
 }
+
+//Not necerraily its size will be 1...incorrect
+bool PTG::isPointsToOfKeyInStackUnknown(int key)
+{
+    std::set<TR::Node *> nodeSet = getNodeSetForKeyInStack(key);
+    if (nodeSet.size() == 1) {
+        if (*(nodeSet.begin()) == PTG::unknownNode())
+            return true;
+    }
+    return false;
+}
+
 
 bool PTG::equals(PTG *another)
 {
@@ -418,4 +435,19 @@ std::set<TR::Node *> PTG::getReachableNeighbours(TR::Node *nodeObj)
         }
     }
     return neighbours;
+}
+
+bool PTG::isMust(const std::set<TR::Node*> &pointees) {
+    if (pointees.size() != 1) return false;
+    TR::Node *only = *pointees.begin();
+    if (only == PTG::unknownNode()) return false;  // still may (undefined path exists)
+    // to decide here whether nullptr (interproc-unknown) counts as MUST or not,
+    return true;
+}
+
+TR::Node *PTG::mustPointee(const std::set<TR::Node*> &pointees)
+{
+    if (!PTG::isMust(pointees))
+        return nullptr;
+    return *pointees.begin();
 }

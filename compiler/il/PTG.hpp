@@ -6,6 +6,7 @@
 #include <utility>
 #include <vector>
 #include <unordered_set>
+#include "il/Node.hpp"
 
 // #include "il/SymbolReference.hpp"
 // #include "il/Node.hpp"
@@ -16,7 +17,6 @@ class SymbolReference;
 
 class PTG { // MayPointsTo To Start with
 public:
-
     std::map<int, /* auto slots */
         std::set<TR::Node *> /* set of Nodes */
         >
@@ -40,6 +40,7 @@ public:
     void setPointsToOfKeyInStackToBottom(
         int key); // the "caller already should have done the check" of correct element insertion
     bool isPointsToOfKeyInStackBottom(int key);
+    bool isPointsToOfKeyInStackUnknown(int key);
 
     /*
     HEAP
@@ -64,6 +65,23 @@ public:
         std::vector<TR::Node *> &res);
     bool pathExistBetween(TR::Node *src, TR::Node *dest, std::unordered_set<TR::Node *> &visited);
     std::set<TR::Node *> getReachableNeighbours(TR::Node *nodeObj);
+
+    /* "?" node encodeing as follows, for eliminating definition free paths*/
+    static TR::Node *unknownNode()
+    {
+        static TR::Node *dummyNode = TR::Node::create(nullptr, TR::BadILOp, 0);
+        return dummyNode;
+    }
+
+    // Onull
+    static TR::Node *nullConstNode()
+    {
+        static TR::Node *dummyNullNode =TR::Node::create(TR::lconst, 0, 0);;
+        return dummyNullNode;
+    }
+
+    static bool isMust(const std::set<TR::Node *> &pointees);
+    static TR::Node *mustPointee(const std::set<TR::Node*> &pointees);
 };
 
 #endif
