@@ -15,34 +15,61 @@ PTG::PTG()
 map < int,               // auto slots //
     set<TR::Node *>          // set of Nodes //
     > _stack;  */
+// void PTG::printStack()
+// {
+//     std::cout << "STACK : ";
+//     std::map<int, std::set<TR::Node *> >::iterator it;
+//     std::set<TR::Node *>::iterator nodeIt;
+//     // for (it = _stack.begin(); it != _stack.end(); ++it) {
+//     //     cout<<" " <<it->first <<"-> { ";
+//     //     for(nodeIt=it->second.begin();nodeIt!=it->second.end();nodeIt++){
+//     //         cout<<(*nodeIt)->_id <<" ";
+//     //     }
+//     //     cout<<" }\n";
+//     // }
+//     //     cout<<"\n";
+
+//     for (it = _stack.begin(); it != _stack.end(); ++it) {
+//         std::cout << " " << it->first << "-> { ";
+//         if (isPointsToOfKeyInStackBottom(it->first)) {
+//             std::cout << "_|_";
+//         } else {
+//             for (nodeIt = it->second.begin(); nodeIt != it->second.end(); nodeIt++) {
+//                 if(*nodeIt == PTG::unknownNode())
+//                 std::cout<<"? ";
+//                 else if(*nodeIt == PTG::nullConstNode())
+//                 std::cout<< "NULL ";
+//                 else
+//                 std::cout << *nodeIt << " ";
+//             }
+//         }
+
+//         std::cout << " }\n";
+//     }
+//     std::cout << "\n";
+// }
+
+
 void PTG::printStack()
 {
     std::cout << "STACK : ";
-    std::map<int, std::set<TR::Node *> >::iterator it;
-    std::set<TR::Node *>::iterator nodeIt;
-    // for (it = _stack.begin(); it != _stack.end(); ++it) {
-    //     cout<<" " <<it->first <<"-> { ";
-    //     for(nodeIt=it->second.begin();nodeIt!=it->second.end();nodeIt++){
-    //         cout<<(*nodeIt)->_id <<" ";
-    //     }
-    //     cout<<" }\n";
-    // }
-    //     cout<<"\n";
-
-    for (it = _stack.begin(); it != _stack.end(); ++it) {
+    for (auto it = _stack.begin(); it != _stack.end(); ++it)
+    {
         std::cout << " " << it->first << "-> { ";
-        if (isPointsToOfKeyInStackBottom(it->first)) {
-            std::cout << "_|_";
-        } else {
-            for (nodeIt = it->second.begin(); nodeIt != it->second.end(); nodeIt++) {
-                if(*nodeIt == PTG::unknownNode())
-                std::cout<<"? ";
-                else
+
+        for (auto nodeIt = it->second.begin(); nodeIt != it->second.end(); ++nodeIt)
+        {
+            if (*nodeIt == nullptr)
+                std::cout << "_|_ ";
+            else if (*nodeIt == PTG::unknownNode())
+                std::cout << "? ";
+            else if (*nodeIt == PTG::nullConstNode())
+                std::cout << "NULL ";
+            else
                 std::cout << *nodeIt << " ";
-            }
         }
 
-        std::cout << " }\n";
+        std::cout << "}\n";
     }
     std::cout << "\n";
 }
@@ -107,37 +134,65 @@ bool PTG::deletekeyFromFromStack(int a)
 //       set<TR::Node *>
 //       >
 //       _heap;
+// void PTG::printHeap()
+// {
+//     std::cout << "HEAP : ";
+//     std::map<std::pair<TR::Node *, TR::SymbolReference *>, std::set<TR::Node *> >::iterator it;
+//     std::set<TR::Node *>::iterator nodeIt;
+
+//     std::pair<TR::Node *, TR::SymbolReference *> objectFieldPair;
+//     for (it = _heap.begin(); it != _heap.end(); ++it) {
+//         objectFieldPair = it->first;
+
+
+//         if(objectFieldPair.second)
+//             std::cout << "[" << objectFieldPair.first << "." << (objectFieldPair.second)->getCPIndex() << "]-> { ";
+//         else //its *
+//             std::cout << "[" << objectFieldPair.first << "." <<"*" << "]-> { ";
+
+//         if (isPointsToOfKeyInHeapBottom(objectFieldPair)) {
+//             std::cout << "_|_";
+//         }
+
+//         else {
+//             for (nodeIt = it->second.begin(); nodeIt != it->second.end(); nodeIt++) {
+//                 if(*nodeIt == PTG::nullConstNode())
+//                     std::cout<<" NULL ";
+//                 else
+//                 std::cout << (*nodeIt) << " ";
+//             }
+//         }
+//         std::cout << " }\n";
+//     }
+//     std::cout << " \n";
+// }
 void PTG::printHeap()
 {
-    std::cout << "HEAP : ";
-    std::map<std::pair<TR::Node *, TR::SymbolReference *>, std::set<TR::Node *> >::iterator it;
-    std::set<TR::Node *>::iterator nodeIt;
+    std::cout << "HEAP : \n";
+    for (auto it = _heap.begin(); it != _heap.end(); ++it)
+    {
+        std::pair<TR::Node *, TR::SymbolReference *> objectFieldPair = it->first;
 
-    std::pair<TR::Node *, TR::SymbolReference *> objectFieldPair;
-    for (it = _heap.begin(); it != _heap.end(); ++it) {
-        objectFieldPair = it->first;
+        if (objectFieldPair.second)
+            std::cout << "[" << objectFieldPair.first << "." << objectFieldPair.second->getCPIndex() << "]-> { ";
+        else // it's *
+            std::cout << "[" << objectFieldPair.first << "." << "*" << "]-> { ";
 
-
-        if(objectFieldPair.second)
-            std::cout << "[" << objectFieldPair.first << "." << (objectFieldPair.second)->getCPIndex() << "]-> { ";
-        else //its *
-            std::cout << "[" << objectFieldPair.first << "." <<"*" << "]-> { ";
-
-        if (isPointsToOfKeyInHeapBottom(objectFieldPair)) {
-            std::cout << "_|_";
+        for (auto nodeIt = it->second.begin(); nodeIt != it->second.end(); ++nodeIt)
+        {
+            if (*nodeIt == nullptr)
+                std::cout << "_|_ ";
+            else if (*nodeIt == PTG::unknownNode())
+                std::cout << "? ";
+            else if (*nodeIt == PTG::nullConstNode())
+                std::cout << "NULL ";
+            else
+                std::cout << *nodeIt << " ";
         }
 
-        else {
-            for (nodeIt = it->second.begin(); nodeIt != it->second.end(); nodeIt++) {
-                if(*nodeIt == PTG::nullConstNode())
-                    std::cout<<" NULL ";
-                else
-                std::cout << (*nodeIt) << " ";
-            }
-        }
-        std::cout << " }\n";
+        std::cout << "}\n";
     }
-    std::cout << " \n";
+    std::cout << "\n";
 }
 
 int PTG::insertIntoHeap(std::pair<TR::Node *, TR::SymbolReference *> objField, TR::Node *obj)

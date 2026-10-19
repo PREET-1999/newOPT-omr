@@ -76,12 +76,52 @@ public:
     // Onull
     static TR::Node *nullConstNode()
     {
-        static TR::Node *dummyNullNode =TR::Node::create(TR::lconst, 0, 0);;
+        static TR::Node *dummyNullNode = TR::Node::create(TR::lconst, 0, 0);
+        ;
         return dummyNullNode;
     }
 
     static bool isMust(const std::set<TR::Node *> &pointees);
-    static TR::Node *mustPointee(const std::set<TR::Node*> &pointees);
+    static TR::Node *mustPointee(const std::set<TR::Node *> &pointees);
+
+    // for classifying nodesets to arrive at a closed list, rather than finding a new case every time
+    enum class NodeSetCategory {
+        EMPTY, // {}                      -> no-op
+        ANYTHING_EVERYTHING, // {nullptr}                -> universal/star weak-update
+        MULTI, // {A1..An}, n > 1          -> weak-update
+        SINGLE // {A}                      -> strong-update eligible
+    };
+
+    // Classifies a NodeSet for transfer-function dispatch. Strips
+    // unknownNode()/nullConstNode() sentinels first (sound only at a
+    // dereference site, under the assumption every dereference in the
+    // input program is valid) then classifies what remains. NOT a
+    // may/must query - do not use this output to answer "does this
+    // definitely point to X"; use the raw NodeSet for that instead.
+    // PTG.hpp
+    static std::set<TR::Node*> stripSentinels(const std::set<TR::Node*> &nodeSet)
+    {
+        std::set<TR::Node*> remainder;
+        for (auto *n : nodeSet)
+            if (n != unknownNode() && n != nullConstNode())
+                remainder.insert(n);
+        return remainder;
+    }
+
+    static NodeSetCategory classify(const std::set<TR::Node*> &nodeSet)
+    {
+        if (nodeSet.empty())
+            return NodeSetCategory::EMPTY;
+        if (nodeSet.count(nullptr))
+            return NodeSetCategory::ANYTHING_EVERYTHING;
+
+        std::set<TR::Node*> remainder = stripSentinels(nodeSet);
+        if (remainder.empty())
+            return NodeSetCategory::EMPTY;
+        if (remainder.size() > 1)
+            return NodeSetCategory::MULTI;
+        return NodeSetCategory::SINGLE;
+    }
 };
 
 #endif
