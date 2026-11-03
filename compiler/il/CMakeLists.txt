@@ -41,7 +41,14 @@ compiler_library(il
 	${CMAKE_CURRENT_LIST_DIR}/NodeUtils.cpp
 	#preet
 	${CMAKE_CURRENT_LIST_DIR}/PTG.cpp
-		${CMAKE_CURRENT_LIST_DIR}/MustReachability.cpp
+	${CMAKE_CURRENT_LIST_DIR}/MustReachability.cpp
+	#InterProcedural
+	${CMAKE_CURRENT_LIST_DIR}/PTGInter.cpp
+	${CMAKE_CURRENT_LIST_DIR}/AbstractField.cpp
+	${CMAKE_CURRENT_LIST_DIR}/AbstractNode.cpp
+	${CMAKE_CURRENT_LIST_DIR}/AbstractPool.cpp
+
+
 
 
 )

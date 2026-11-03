@@ -39,8 +39,11 @@
 #include "il/TreeTop.hpp"
 #include "il/TreeTop_inlines.hpp"
 #include "infra/Assert.hpp"
-//preet
-#include "il/PTG.hpp"
+//preet intra
+// #include "il/PTG.hpp"
+
+//preet 
+#include "il/PTGInter.hpp"
 
 //preet
 #include<iostream>
@@ -284,8 +287,12 @@ bool OMR::TreeTop::isPossibleDef()
 //preet
 void OMR::TreeTop::initializeInAndOutSets()
 {
-     _in = new PTG();
-    _out = new PTG();
+    //intra
+    //  _in = new PTG();
+    // _out = new PTG();
+
+     _in = new PTGInter();
+    _out = new PTGInter();
 }
 
 

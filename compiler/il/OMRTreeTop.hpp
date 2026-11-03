@@ -48,7 +48,10 @@ class TreeTop;
 } // namespace TR
 
 //preet
-class PTG;
+// class PTG;
+
+// preet inter
+class PTGInter;
 
 namespace OMR {
 
@@ -113,9 +116,13 @@ public:
 
     void setLastInstruction(TR::Instruction *i) { *(TR::Instruction **)((char *)self() - sizeof(void *)) = i; }
 
-    // preet
-    PTG *_in;
-    PTG *_out;
+    // preet intra
+    // PTG *_in;
+    // PTG *_out;
+    
+    //preet inter
+    PTGInter *_in;
+    PTGInter *_out;
     void initializeInAndOutSets();
     void printDataFlow();
 protected:
