@@ -122,3 +122,4 @@
    OPTIMIZATION(constRefPrivatization)
 // preet
    OPTIMIZATION(preetOptimization)
+   OPTIMIZATION(preetOptimizationForMethods)

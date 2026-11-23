@@ -2034,6 +2034,9 @@ TR::OptionTable OMR::Options::_jitOptions[] = {
      //preet
      { "tracePreetOptPass", "L\ttrace preets optimization", TR::Options::traceOptimization,
      preetOptimization, 0, "P" },
+     //preet
+    { "tracePreetOptPassForMethods", "L\ttrace preets optimization", TR::Options::traceOptimization,
+     preetOptimizationForMethods, 0, "P" },
     { "tracePREForSubNodeReplacement",
      "L\ttrace partial redundancy elimination focussed on optimal subnode replacement", SET_OPTION_BIT(TR_TracePREForOptimalSubNodeReplacement), "P" },
     { "traceProfiledNodeVersioning", "L\ttrace profiled node versioning", TR::Options::traceOptimization,
